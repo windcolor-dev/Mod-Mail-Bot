@@ -6,14 +6,14 @@ client = discord.Client()
 hash_tables = hash_map(100)
 
 # Replace this with your bot's token
-token = YourTokenHere
+token = 'YourTokenHere'
 
 # Please see color-info.txt for information on colors.
 color = 0x3498db
 
 # Replace this with a channel that displays when a new message is received.
 # Put this in the category that you want your mod-mail channels to appear in.
-info_channel_id = YourInfoChannelID
+info_channel_id = 824665209217089599
 
 # If the bot's status should be set (configure below)
 status_enabled = True
@@ -24,7 +24,7 @@ bot_status = 'your DMs'
 
 # If the bot should ping @here in the logs channel when a new message is 
 # received.
-ping_here = False
+ping_here = True
 
 
 @client.event
@@ -49,7 +49,7 @@ async def on_message(message):
                 hash_tables.delete_val(message.channel)
 
         print('[LOGS] A mod mail channel was deleted')
-        channelGet = await get_channel(info_channel_id)
+        channelGet = client.get_channel(info_channel_id)
         await channelGet.send('[LOGS] A mod mail channel was deleted')
         await message.channel.delete()
 
@@ -66,6 +66,7 @@ async def on_message(message):
 
     if str(message.channel.type) == 'private':
       if hash_tables.get_val(message.author.name) != 'No record found':
+        channelGet = client.get_channel(info_channel_id)
         staffChannel = hash_tables.get_val(message.author.name)
         embed=discord.Embed(title='Message from ' + message.author.name + ':', description=message.content, color=color)
         embed.set_footer(text=message.author.name, icon_url=message.author.avatar_url)    
@@ -81,29 +82,29 @@ async def on_message(message):
             
         return
 
-    channelGet = await get_channel(info_channel_id)
-    modMailChannel = await channelGet.guild.create_text_channel(name=message.author.name +'-mod-mail', category=channelGet.category)
+      channelGet = client.get_channel(info_channel_id)
+      modMailChannel = await channelGet.guild.create_text_channel(name=message.author.name +'-mod-mail', category=channelGet.category)
 
-    await channelGet.send('[LOGS] A new message was received from ' + message.author.name + '.')
-    if ping_here == True:
-        await channelGet.send('@here')
+      await channelGet.send('[LOGS] A new message was received from ' + message.author.name + '.')
+      if ping_here == True:
+          await channelGet.send('@here')
 
-    hash_tables.set_val(message.author.name, modMailChannel)
-    hash_tables.set_val(modMailChannel, message.author)
-    
-    channel = hash_tables.get_val(message.author.name)
-    
-    staffEmbed=discord.Embed(title='Message from ' + message.author.name + ':', description=message.content, color=color)
-    staffEmbed.set_footer(text=message.author.name, icon_url=message.author.avatar_url)    
-    
-    userEmbed=discord.Embed(title='Your Message:', description=message.content, color=color)
-    userEmbed.set_footer(text=message.author.name, icon_url=message.author.avatar_url)
+      hash_tables.set_val(message.author.name, modMailChannel)
+      hash_tables.set_val(modMailChannel, message.author)
+      
+      channel = hash_tables.get_val(message.author.name)
+      
+      staffEmbed=discord.Embed(title='Message from ' + message.author.name + ':', description=message.content, color=color)
+      staffEmbed.set_footer(text=message.author.name, icon_url=message.author.avatar_url)    
+      
+      userEmbed=discord.Embed(title='Your Message:', description=message.content, color=color)
+      userEmbed.set_footer(text=message.author.name, icon_url=message.author.avatar_url)
 
-    await channel.send(embed=staffEmbed)
-    
-    await message.channel.send('**Your message has been sent to mod-mail!**')
+      await channel.send(embed=staffEmbed)
+      
+      await message.channel.send('**Your message has been sent to mod-mail!**')
 
-    await message.author.send(embed=userEmbed)
+      await message.author.send(embed=userEmbed)
 
     
 client.run(token)
