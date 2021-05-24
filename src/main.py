@@ -29,10 +29,9 @@ async def on_ready():
     await set_status()
   
 async def set_status():
-
   time.sleep(2)
   if status_enabled == True:
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name='!help and DMs'))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=bot_status))
 
 @client.event
 async def on_message(message):
