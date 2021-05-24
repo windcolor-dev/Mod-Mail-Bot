@@ -22,6 +22,10 @@ status_enabled = True
 # This would set the bot's status to "Listening to your DMs"
 bot_status = 'your DMs'
 
+# If the bot should ping @here in the logs channel when a new message is 
+# received.
+ping_here = False
+
 
 @client.event
 async def on_ready():
@@ -45,6 +49,8 @@ async def on_message(message):
                 hash_tables.delete_val(message.channel)
 
         print('[LOGS] A mod mail channel was deleted')
+        channelGet = await get_channel(info_channel_id)
+        await channelGet.send('[LOGS] A mod mail channel was deleted')
         await message.channel.delete()
 
     if hash_tables.get_val(message.channel) != 'No record found':
@@ -68,10 +74,19 @@ async def on_message(message):
         userEmbed.set_footer(text=message.author.name, icon_url=message.author.avatar_url)
         await staffChannel.send(embed=embed)
         await DMChannel.send(embed=userEmbed)
+        
+        await channelGet.send('[LOGS] A new message was received from ' + message.author.name + '.')
+        if ping_here == True:
+            await channelGet.send('@here')
+            
         return
 
     channelGet = await get_channel(info_channel_id)
     modMailChannel = await channelGet.guild.create_text_channel(name=message.author.name +'-mod-mail', category=channelGet.category)
+
+    await channelGet.send('[LOGS] A new message was received from ' + message.author.name + '.')
+    if ping_here == True:
+        await channelGet.send('@here')
 
     hash_tables.set_val(message.author.name, modMailChannel)
     hash_tables.set_val(modMailChannel, message.author)
