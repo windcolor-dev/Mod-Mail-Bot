@@ -13,7 +13,7 @@ color = 0x3498db
 
 # Replace this with a channel that displays when a new message is received.
 # Put this in the category that you want your mod-mail channels to appear in.
-info_channel_id = 824665209217089599
+info_channel_id = 'ChannelIdNumber'
 
 # If the bot's status should be set (configure below)
 status_enabled = True
