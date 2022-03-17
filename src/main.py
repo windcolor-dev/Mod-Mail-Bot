@@ -51,7 +51,7 @@ async def on_message(message):
         if message.channel.name.endswith('-mod-mail'):
             
             # Delete values from our hash tables (channel is linked to user, user is linked to channel)
-            hash_tables.delete_val(hash_tables.get_val(message.channel))
+            hash_tables.delete_val(hash_tables.get_val(message.channel).name)
             hash_tables.delete_val(message.channel)
 
             # Logs
