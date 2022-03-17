@@ -2,7 +2,6 @@ import discord
 from hash_maps import *
 import time
 
-client = discord.Client()
 hash_tables = hash_map(100)
 
 # Replace this with your bot's token
@@ -26,6 +25,7 @@ bot_status = 'your DMs'
 # received.
 ping_here = True
 
+client = discord.Client()
 
 @client.event
 async def on_ready():
